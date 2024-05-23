@@ -1,0 +1,73 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class NumberGuessingGame {
+
+    private static final int MIN_LIMIT = 1;
+    private static final int MAX_LIMIT = 100;
+    private static final int MAX_TRIES = 10;
+    private static final int TOTAL_ROUNDS = 3;
+
+    public static void main(String[] args) {
+        Random rand = new Random();
+        Scanner scan = new Scanner(System.in);
+        int overallScore = 0;
+
+        System.out.println("WELCOME TO THE NUMBER GUESSING GAME!");
+        System.out.println("You will play 3 rounds.");
+        System.out.println("Each round, you have 10 attempts to guess the number.");
+        System.out.println("Type 'exit' at any point to leave the game.\n");
+
+        for (int round = 1; round <= TOTAL_ROUNDS; round++) {
+            int targetNumber = rand.nextInt(MAX_LIMIT) + MIN_LIMIT;
+            int numOfTries = 0;
+
+            System.out.printf("Round %d: Guess the number between %d and %d. You have %d attempts.\n", round, MIN_LIMIT, MAX_LIMIT, MAX_TRIES);
+            while (numOfTries < MAX_TRIES) {
+                System.out.print("Enter your guess: ");
+                String userInput = scan.next();
+
+                if (userInput.equalsIgnoreCase("exit")) {
+                    System.out.println("Exiting the game. Thank you for playing!");
+                    scan.close();
+                    return;
+                }
+
+                int userGuess;
+                try {
+                    userGuess = Integer.parseInt(userInput);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a number or type 'exit' to quit.");
+                    continue;
+                }
+
+                numOfTries++;
+
+                if (userGuess == targetNumber) {
+                    int roundScore = MAX_TRIES - numOfTries;
+                    overallScore += roundScore;
+                    System.out.printf("Congratulations! You guessed the number in %d attempts. You scored %d points this round.\n", numOfTries, roundScore);
+                    break;
+                } else if (userGuess < targetNumber) {
+                    System.out.printf("The number is higher than %d. You have %d attempts left.\n", userGuess, MAX_TRIES - numOfTries);
+                } else {
+                    System.out.printf("The number is lower than %d. You have %d attempts left.\n", userGuess, MAX_TRIES - numOfTries);
+                }
+            }
+
+            if (numOfTries == MAX_TRIES) {
+                System.out.printf("\nRound %d ended.\n", round);
+                System.out.println("You used all attempts.");
+                System.out.printf("The correct number was: %d\n\n", targetNumber);
+            }
+        }
+        System.out.printf("The game is over. Your total score is: %d\n", overallScore);
+        scan.close();
+    }
+}
+
+
+
+
+
+
